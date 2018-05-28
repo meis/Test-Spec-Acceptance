@@ -1,55 +1,55 @@
-package Test::Spec::Acceptance {
-    # ABSTRACT: Aliases for acceptance-like testing using Test::Spec
-    use parent qw(Exporter);
-    use Test::Spec;
+package Test::Spec::Acceptance;
 
-    our $VERSION = '0.01';
+# ABSTRACT: Aliases for acceptance-like testing using Test::Spec
+use parent qw(Exporter);
+use Test::Spec;
 
-    our @ACCEPTANCE_EXPORT = qw( Feature Scenario Given When Then And );
-    our @EXPORT = (
-        @Test::Spec::EXPORT,
-        @Test::Spec::ExportProxy::EXPORT,
-        @ACCEPTANCE_EXPORT,
-    );
-    our @EXPORT_OK = (
-        @Test::Spec::EXPORT_OK,
-        @Test::Spec::ExportProxy::EXPORT_OK,
-        @ACCEPTANCE_EXPORT,
-    );
-    our %EXPORT_TAGS = (all => \@EXPORT_OK);
+our $VERSION = '0.01';
 
-    sub import {
-        my $class = shift;
-        my $callpkg = caller;
+our @ACCEPTANCE_EXPORT = qw( Feature Scenario Given When Then And );
+our @EXPORT = (
+    @Test::Spec::EXPORT,
+    @Test::Spec::ExportProxy::EXPORT,
+    @ACCEPTANCE_EXPORT,
+);
+our @EXPORT_OK = (
+    @Test::Spec::EXPORT_OK,
+    @Test::Spec::ExportProxy::EXPORT_OK,
+    @ACCEPTANCE_EXPORT,
+);
+our %EXPORT_TAGS = (all => \@EXPORT_OK);
 
-        strict->import;
-        warnings->import;
+sub import {
+    my $class = shift;
+    my $callpkg = caller;
 
-        if (@_) {
-            $class->export_to_level(1, $callpkg, @_);
-            return;
-        }
+    strict->import;
+    warnings->import;
 
-        eval qq{
-            package $callpkg;
-            use parent 'Test::Spec::Acceptance';
-            # allow Test::Spec usage errors to be reported via Carp
-            our \@CARP_NOT = qw($callpkg);
-        };
-        die $@ if $@;
-
-        Test::Spec->export_to_level(1, $callpkg);
-        $class->export_to_level(1, $callpkg);
+    if (@_) {
+        $class->export_to_level(1, $callpkg, @_);
+        return;
     }
 
-    BEGIN {
-        *Feature = \&Test::Spec::describe;
-        *Scenario = \&Test::Spec::describe;
-        *Given = \&Test::Spec::it;
-        *When = \&Test::Spec::it;
-        *Then = \&Test::Spec::it;
-        *And = \&Test::Spec::it;
-    }
+    eval qq{
+        package $callpkg;
+        use parent 'Test::Spec::Acceptance';
+        # allow Test::Spec usage errors to be reported via Carp
+        our \@CARP_NOT = qw($callpkg);
+    };
+    die $@ if $@;
+
+    Test::Spec->export_to_level(1, $callpkg);
+    $class->export_to_level(1, $callpkg);
+}
+
+BEGIN {
+    *Feature = \&Test::Spec::describe;
+    *Scenario = \&Test::Spec::describe;
+    *Given = \&Test::Spec::it;
+    *When = \&Test::Spec::it;
+    *Then = \&Test::Spec::it;
+    *And = \&Test::Spec::it;
 }
 
 1;
