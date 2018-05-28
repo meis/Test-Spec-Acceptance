@@ -4,7 +4,7 @@ package Test::Spec::Acceptance;
 use parent qw(Exporter);
 use Test::Spec;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 our @ACCEPTANCE_EXPORT = qw( Feature Scenario Given When Then And );
 our @EXPORT = (
